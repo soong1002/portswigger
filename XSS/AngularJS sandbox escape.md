@@ -18,13 +18,13 @@ payload mình truyền vào
 
 giải thích cho payload
 
-Bằng cách gán [].join cho charAt , hành vi của phương thức charAt được thay đổi để nối tất cả các phần tử của một mảng thành một chuỗi, thay vì trích xuất các ký tự từ một chuỗi.
+Bằng cách gán [].join cho charAt , hành vi của phương thức charAt được thay đổi để nối tất cả các phần tử của một mảng thành một chuỗi, thay vì trích xuất các ký tự từ một chuỗi. Điều này sẽ giúp bypass sandbox của AngularJS
 
 kết thúc thay đổi bằng dấu chấm phẩy, sau dấu chấm phẩy sẽ là payload chính gây ra XSS
 
-Phần tiếp theo của payload là `1`. Điều này tạo ra một mảng có một phần tử, đó là số 1, `|` áp dụng cho filter OrderBy 
+Phần tiếp theo của payload là `1`. Điều này tạo ra một mảng có một phần tử, đó là số 1, `|` ở đây không phải OR mà là lấy mảng bên trái áp dụng với biểu thức bên phải thông qua OrderBy 
 
-`toString().constructor.fromCharCode(120,61,97,108,101,114,116,40,49,41)=1` . Đây là một biểu thức JavaScript chuyển đổi mã ASCII: (120,61,97,108,101,114,116,40,49,41) thành chuỗi x=alert(). Đây là một mã JavaScript độc hại hiển thị thông báo cảnh báo có giá trị 1 .
+`toString().constructor.fromCharCode(120,61,97,108,101,114,116,40,49,41)=1` . Đây là một biểu thức JavaScript chuyển đổi mã ASCII: (120,61,97,108,101,114,116,40,49,41) thành chuỗi x=alert(). Đây là một mã JavaScript độc hại hiển thị thông báo cảnh báo có giá trị 1 . Nói cách dễ hiểu hơn thì phần expression của orderBy nó là x=alert(1), phần expression này gây ra lỗi XSS khi Angular đánh giá và execute nó
 
 Phần `=1` cuối của biểu thức được bao gồm để đảm bảo rằng biểu thức trả về giá trị đúng. Trong AngularJS, filter mong đợi giá trị đúng được trả về từ biểu thức đối số, biểu thức trả về giá trị đúng 1 , cho phép filter orderBy thực thi mã JavaScript độc hại.
 
